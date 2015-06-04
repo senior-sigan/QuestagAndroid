@@ -1,0 +1,109 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/linearLayout">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/imageView1"
+                android:padding="2dp"
+                android:layout_width="160dp"
+                android:layout_height="160dp" />
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/imageView2"
+                android:padding="2dp"
+                android:layout_width="160dp"
+                android:layout_height="160dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/imageView3"
+                android:padding="2dp"
+                android:layout_width="160dp"
+                android:layout_height="160dp" />
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/imageView4"
+                android:padding="2dp"
+                android:layout_width="160dp"
+                android:layout_height="160dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/linearLayout"
+        android:layout_centerHorizontal="true">
+
+        <LinearLayout
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:layout_width="160dp"
+                android:layout_height="80dp"
+                android:text="Cat"
+                android:id="@+id/button1"
+                android:onClick="tagSelected" />
+
+            <Button
+                android:layout_width="160dp"
+                android:layout_height="80dp"
+                android:text="Girl"
+                android:id="@+id/button2"
+                android:onClick="tagSelected" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:layout_width="160dp"
+                android:layout_height="80dp"
+                android:text="Omsk"
+                android:id="@+id/button3"
+                android:onClick="tagSelected" />
+
+            <Button
+                android:layout_width="160dp"
+                android:layout_height="80dp"
+                android:text="Coffee"
+                android:id="@+id/button4"
+                android:onClick="tagSelected" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>
