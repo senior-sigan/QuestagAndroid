@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primaryDark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="android:textColorPrimary">@color/textPrimary</item>
+        <item name="android:textColor">@color/text</item>
+    </style>
+
+    <color name="primary">#8BC34A</color>
+    <color name="primaryDark">#689F38</color>
+    <color name="primaryLight">#DCEDC8</color>
+    <color name="accent">#4CAF50</color>
+    <color name="text">#212121</color>
+    <color name="textPrimary">#ffffff</color>
+    <color name="secondaryText">#727272</color>
+</resources>

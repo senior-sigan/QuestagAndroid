@@ -1,4 +1,4 @@
-package org.catinthedark.quizpic;
+package org.catinthedark.questag;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

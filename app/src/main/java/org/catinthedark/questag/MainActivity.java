@@ -1,6 +1,5 @@
-package org.catinthedark.quizpic;
+package org.catinthedark.questag;
 
-import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;

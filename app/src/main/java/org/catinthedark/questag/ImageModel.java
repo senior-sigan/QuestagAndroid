@@ -1,4 +1,4 @@
-package org.catinthedark.quizpic;
+package org.catinthedark.questag;
 
 public class ImageModel {
     public final String thumbnailUrl;
