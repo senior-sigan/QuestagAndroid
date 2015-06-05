@@ -1,39 +1,86 @@
 package org.catinthedark.quizpic;
 
-import android.net.Uri;
-import android.support.v7.app.ActionBarActivity;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.koushikdutta.ion.Ion;
 
-import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
 
     final static String TAG = "QuizPic";
 
+    private class ThumbImageListener implements View.OnClickListener {
+        final ImageView imageView;
+        final ImageModel imageModel;
+
+        public ThumbImageListener(final ImageView imageView, final ImageModel imageModel) {
+            this.imageView = imageView;
+            this.imageModel = imageModel;
+        }
+
+        @Override
+        public void onClick(View v) {
+            zoomImageFromThumb(imageView, imageModel);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Fresco.initialize(getBaseContext());
         setContentView(R.layout.activity_main);
-        final Uri uri = Uri.parse("https://scontent.cdninstagram.com/hphotos-xfa1/t51.2885-15/s320x320/e15/11419025_956716491015049_514263880_n.jpg");
-        final SimpleDraweeView draweeView1 = (SimpleDraweeView)findViewById(R.id.imageView1);
-        final SimpleDraweeView draweeView2 = (SimpleDraweeView)findViewById(R.id.imageView2);
-        final SimpleDraweeView draweeView3 = (SimpleDraweeView)findViewById(R.id.imageView3);
-        final SimpleDraweeView draweeView4 = (SimpleDraweeView)findViewById(R.id.imageView4);
-        draweeView1.setImageURI(uri);
-        draweeView2.setImageURI(uri);
-        draweeView3.setImageURI(uri);
-        draweeView4.setImageURI(uri);
+
+        final List<ImageModel> images = new ArrayList<>();
+        images.add(new ImageModel("https://scontent.cdninstagram.com/hphotos-xfa1/t51.2885-15/s320x320/e15/11251082_996206120391754_220197680_n.jpg", "https://scontent.cdninstagram.com/hphotos-xfa1/t51.2885-15/e15/11251082_996206120391754_220197680_n.jpg"));
+        images.add(new ImageModel("https://scontent.cdninstagram.com/hphotos-xfa1/t51.2885-15/s320x320/e15/11258207_939063396145061_878676856_n.jpg", "https://scontent.cdninstagram.com/hphotos-xfa1/t51.2885-15/e15/11258207_939063396145061_878676856_n.jpg"));
+        images.add(new ImageModel("https://scontent.cdninstagram.com/hphotos-xap1/t51.2885-15/s320x320/e15/11190001_630711613696116_1765183538_n.jpg", "https://scontent.cdninstagram.com/hphotos-xap1/t51.2885-15/e15/11190001_630711613696116_1765183538_n.jpg"));
+        images.add(new ImageModel("https://scontent.cdninstagram.com/hphotos-xfa1/t51.2885-15/s320x320/e15/11375897_1598078640459760_491696510_n.jpg", "https://scontent.cdninstagram.com/hphotos-xfa1/t51.2885-15/e15/11375897_1598078640459760_491696510_n.jpg"));
+
+        final ImageView imageView1 = (ImageView)findViewById(R.id.imageView1);
+        final ImageView imageView3 = (ImageView)findViewById(R.id.imageView3);
+        final ImageView imageView4 = (ImageView)findViewById(R.id.imageView4);
+        final ImageView imageView2 = (ImageView)findViewById(R.id.imageView2);
+        Ion.with(imageView1).load(images.get(0).thumbnailUrl);
+        Ion.with(imageView2).load(images.get(1).thumbnailUrl);
+        Ion.with(imageView3).load(images.get(2).thumbnailUrl);
+        Ion.with(imageView4).load(images.get(3).thumbnailUrl);
+
+        imageView1.setOnClickListener(new ThumbImageListener(imageView1, images.get(0)));
+        imageView2.setOnClickListener(new ThumbImageListener(imageView2, images.get(1)));
+        imageView3.setOnClickListener(new ThumbImageListener(imageView3, images.get(2)));
+        imageView4.setOnClickListener(new ThumbImageListener(imageView4, images.get(3)));
     }
+
+    private void zoomImageFromThumb(final ImageView imageView, final ImageModel model) {
+        final ImageView bigView = (ImageView)findViewById(R.id.imageViewBig);
+        final LinearLayout layout = (LinearLayout)findViewById(R.id.imagesLayout);
+        bigView.setImageDrawable(imageView.getDrawable());
+        Ion.with(bigView).load(model.highResolutionUrl);
+        bigView.setPivotX(0f);
+        bigView.setPivotY(0f);
+        bigView.setVisibility(View.VISIBLE);
+        layout.setVisibility(View.INVISIBLE);
+
+        bigView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bigView.setVisibility(View.INVISIBLE);
+                layout.setVisibility(View.VISIBLE);
+                bigView.setImageDrawable(null);
+            }
+        });
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
