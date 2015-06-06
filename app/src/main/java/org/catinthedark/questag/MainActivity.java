@@ -6,18 +6,23 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.koushikdutta.ion.Ion;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
 
     final static String TAG = "QuizPic";
+    QuestionFlow questionFlow;
+    final List<Button> buttons = new ArrayList<>(4);
 
     private class ThumbImageListener implements View.OnClickListener {
         final ImageView imageView;
@@ -39,6 +44,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        questionFlow = new QuestionFlow();
+        buttons.add((Button)findViewById(R.id.button1));
+        buttons.add((Button)findViewById(R.id.button2));
+        buttons.add((Button)findViewById(R.id.button3));
+        buttons.add((Button)findViewById(R.id.button4));
+
+        for (Button button: buttons) {
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showVariants();
+                }
+            });
+        }
+
+        showVariants();
+
         final List<ImageModel> images = new ArrayList<>();
         images.add(new ImageModel("https://scontent.cdninstagram.com/hphotos-xfa1/t51.2885-15/s320x320/e15/11251082_996206120391754_220197680_n.jpg", "https://scontent.cdninstagram.com/hphotos-xfa1/t51.2885-15/e15/11251082_996206120391754_220197680_n.jpg"));
         images.add(new ImageModel("https://scontent.cdninstagram.com/hphotos-xfa1/t51.2885-15/s320x320/e15/11258207_939063396145061_878676856_n.jpg", "https://scontent.cdninstagram.com/hphotos-xfa1/t51.2885-15/e15/11258207_939063396145061_878676856_n.jpg"));
@@ -58,6 +80,19 @@ public class MainActivity extends AppCompatActivity {
         imageView2.setOnClickListener(new ThumbImageListener(imageView2, images.get(1)));
         imageView3.setOnClickListener(new ThumbImageListener(imageView3, images.get(2)));
         imageView4.setOnClickListener(new ThumbImageListener(imageView4, images.get(3)));
+    }
+
+    private void showVariants() {
+        Question question = questionFlow.next();
+        for (int i = 0; i < buttons.size(); ++i) {
+            if (!questionFlow.hasNext()) {
+                Toast.makeText(getApplicationContext(), "Game over. Reset", Toast.LENGTH_SHORT).show();
+                questionFlow.reset();
+            }
+            Tag tag = question.getVariants().get(i);
+            buttons.get(i).setText(tag.getName());
+            //Log.d(TAG, question.getAnswer().getName());
+        }
     }
 
     private void zoomImageFromThumb(final ImageView imageView, final ImageModel model) {

@@ -1,7 +1,9 @@
 package org.catinthedark.questag;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Question {
@@ -13,8 +15,8 @@ public class Question {
         this.answer = answer;
     }
 
-    public Set<Tag> getVariants() {
-        return variants;
+    public List<Tag> getVariants() {
+        return Arrays.asList(variants.toArray(new Tag[variants.size()]));
     }
 
     public Tag getAnswer() {
