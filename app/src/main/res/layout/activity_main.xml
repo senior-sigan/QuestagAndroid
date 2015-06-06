@@ -79,14 +79,12 @@
             <Button
                 android:layout_width="160dp"
                 android:layout_height="80dp"
-                android:text="Cat"
                 android:id="@+id/button1"
                 android:onClick="tagSelected" />
 
             <Button
                 android:layout_width="160dp"
                 android:layout_height="80dp"
-                android:text="Girl"
                 android:id="@+id/button2"
                 android:onClick="tagSelected" />
         </LinearLayout>
@@ -100,14 +98,12 @@
             <Button
                 android:layout_width="160dp"
                 android:layout_height="80dp"
-                android:text="Omsk"
                 android:id="@+id/button3"
                 android:onClick="tagSelected" />
 
             <Button
                 android:layout_width="160dp"
                 android:layout_height="80dp"
-                android:text="Coffee"
                 android:id="@+id/button4"
                 android:onClick="tagSelected" />
         </LinearLayout>

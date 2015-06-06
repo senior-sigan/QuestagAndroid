@@ -14,28 +14,70 @@ import android.widget.Toast;
 import com.koushikdutta.ion.Ion;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    final static String TAG = "QuizPic";
+    final static String TAG = "QUESTAG";
     QuestionFlow questionFlow;
-    final List<Button> buttons = new ArrayList<>(4);
+    final List<ButtonController> buttonControllers = new ArrayList<>(4);
+    final List<ImageViewController> imageViewControllers = new ArrayList<>(4);
+    PicturesRepository picturesRepository;
 
-    private class ThumbImageListener implements View.OnClickListener {
-        final ImageView imageView;
-        final ImageModel imageModel;
+    class ButtonListener implements View.OnClickListener {
+        private final ButtonController controller;
+        private final QuestionFlow flow;
 
-        public ThumbImageListener(final ImageView imageView, final ImageModel imageModel) {
-            this.imageView = imageView;
-            this.imageModel = imageModel;
+        public ButtonListener(final ButtonController controller, final QuestionFlow flow) {
+            this.controller = controller;
+            this.flow = flow;
+        }
+
+        @Override
+        public void onClick(final View v) {
+            if (controller.getModel().equals(flow.current().getAnswer())) {
+                showVariants();
+            } else {
+                Toast.makeText(v.getContext(), "Wrong", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    class ThumbImageListener implements View.OnClickListener {
+        final ImageViewController data;
+
+        public ThumbImageListener(final ImageViewController data) {
+            this.data = data;
         }
 
         @Override
         public void onClick(View v) {
-            zoomImageFromThumb(imageView, imageModel);
+            if (data.getModel() != null && data.getView() != null) {
+                zoomImageFromThumb(data.getView(), data.getModel());
+            } else {
+                Log.e(TAG, "ImageModel and ImageView are null");
+            }
+        }
+
+        private void zoomImageFromThumb(final ImageView imageView, final ImageModel model) {
+            final ImageView bigView = (ImageView)findViewById(R.id.imageViewBig);
+            final LinearLayout layout = (LinearLayout)findViewById(R.id.imagesLayout);
+            bigView.setImageDrawable(imageView.getDrawable());
+            Ion.with(bigView).load(model.highResolutionUrl);
+            bigView.setPivotX(0f);
+            bigView.setPivotY(0f);
+            bigView.setVisibility(View.VISIBLE);
+            layout.setVisibility(View.INVISIBLE);
+
+            bigView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    bigView.setVisibility(View.INVISIBLE);
+                    layout.setVisibility(View.VISIBLE);
+                    bigView.setImageDrawable(null);
+                }
+            });
         }
     }
 
@@ -44,77 +86,48 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        picturesRepository = new InstagramPicturesRepository(getApplicationContext());
         questionFlow = new QuestionFlow();
-        buttons.add((Button)findViewById(R.id.button1));
-        buttons.add((Button)findViewById(R.id.button2));
-        buttons.add((Button)findViewById(R.id.button3));
-        buttons.add((Button)findViewById(R.id.button4));
 
-        for (Button button: buttons) {
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showVariants();
-                }
-            });
+        buttonControllers.add(new ButtonController((Button)findViewById(R.id.button1)));
+        buttonControllers.add(new ButtonController((Button)findViewById(R.id.button2)));
+        buttonControllers.add(new ButtonController((Button)findViewById(R.id.button3)));
+        buttonControllers.add(new ButtonController((Button)findViewById(R.id.button4)));
+
+        for (ButtonController controller: buttonControllers) {
+            controller.setOnClickListener(new ButtonListener(controller, questionFlow));
+        }
+
+        imageViewControllers.add(new ImageViewController((ImageView)findViewById(R.id.imageView1)));
+        imageViewControllers.add(new ImageViewController((ImageView)findViewById(R.id.imageView2)));
+        imageViewControllers.add(new ImageViewController((ImageView)findViewById(R.id.imageView3)));
+        imageViewControllers.add(new ImageViewController((ImageView)findViewById(R.id.imageView4)));
+
+        for (ImageViewController controller: imageViewControllers) {
+            controller.setOnClickListener(new ThumbImageListener(controller));
         }
 
         showVariants();
-
-        final List<ImageModel> images = new ArrayList<>();
-        images.add(new ImageModel("https://scontent.cdninstagram.com/hphotos-xfa1/t51.2885-15/s320x320/e15/11251082_996206120391754_220197680_n.jpg", "https://scontent.cdninstagram.com/hphotos-xfa1/t51.2885-15/e15/11251082_996206120391754_220197680_n.jpg"));
-        images.add(new ImageModel("https://scontent.cdninstagram.com/hphotos-xfa1/t51.2885-15/s320x320/e15/11258207_939063396145061_878676856_n.jpg", "https://scontent.cdninstagram.com/hphotos-xfa1/t51.2885-15/e15/11258207_939063396145061_878676856_n.jpg"));
-        images.add(new ImageModel("https://scontent.cdninstagram.com/hphotos-xap1/t51.2885-15/s320x320/e15/11190001_630711613696116_1765183538_n.jpg", "https://scontent.cdninstagram.com/hphotos-xap1/t51.2885-15/e15/11190001_630711613696116_1765183538_n.jpg"));
-        images.add(new ImageModel("https://scontent.cdninstagram.com/hphotos-xfa1/t51.2885-15/s320x320/e15/11375897_1598078640459760_491696510_n.jpg", "https://scontent.cdninstagram.com/hphotos-xfa1/t51.2885-15/e15/11375897_1598078640459760_491696510_n.jpg"));
-
-        final ImageView imageView1 = (ImageView)findViewById(R.id.imageView1);
-        final ImageView imageView3 = (ImageView)findViewById(R.id.imageView3);
-        final ImageView imageView4 = (ImageView)findViewById(R.id.imageView4);
-        final ImageView imageView2 = (ImageView)findViewById(R.id.imageView2);
-        Ion.with(imageView1).load(images.get(0).thumbnailUrl);
-        Ion.with(imageView2).load(images.get(1).thumbnailUrl);
-        Ion.with(imageView3).load(images.get(2).thumbnailUrl);
-        Ion.with(imageView4).load(images.get(3).thumbnailUrl);
-
-        imageView1.setOnClickListener(new ThumbImageListener(imageView1, images.get(0)));
-        imageView2.setOnClickListener(new ThumbImageListener(imageView2, images.get(1)));
-        imageView3.setOnClickListener(new ThumbImageListener(imageView3, images.get(2)));
-        imageView4.setOnClickListener(new ThumbImageListener(imageView4, images.get(3)));
     }
 
     private void showVariants() {
         Question question = questionFlow.next();
-        for (int i = 0; i < buttons.size(); ++i) {
+        for (int i = 0; i < buttonControllers.size(); ++i) {
             if (!questionFlow.hasNext()) {
                 Toast.makeText(getApplicationContext(), "Game over. Reset", Toast.LENGTH_SHORT).show();
                 questionFlow.reset();
             }
-            Tag tag = question.getVariants().get(i);
-            buttons.get(i).setText(tag.getName());
-            //Log.d(TAG, question.getAnswer().getName());
+            final Tag tag = question.getVariants().get(i);
+            buttonControllers.get(i).setModel(tag);
+            final ImageViewController imageViewController = imageViewControllers.get(i);
+            picturesRepository.getUrlByTag(question.getAnswer().getName(), new PicturesRepository.OnLoaded() {
+                @Override
+                public void run(final ImageModel model) {
+                    imageViewController.setModel(model);
+                }
+            });
         }
     }
-
-    private void zoomImageFromThumb(final ImageView imageView, final ImageModel model) {
-        final ImageView bigView = (ImageView)findViewById(R.id.imageViewBig);
-        final LinearLayout layout = (LinearLayout)findViewById(R.id.imagesLayout);
-        bigView.setImageDrawable(imageView.getDrawable());
-        Ion.with(bigView).load(model.highResolutionUrl);
-        bigView.setPivotX(0f);
-        bigView.setPivotY(0f);
-        bigView.setVisibility(View.VISIBLE);
-        layout.setVisibility(View.INVISIBLE);
-
-        bigView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bigView.setVisibility(View.INVISIBLE);
-                layout.setVisibility(View.VISIBLE);
-                bigView.setImageDrawable(null);
-            }
-        });
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

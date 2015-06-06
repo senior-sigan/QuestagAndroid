@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 public class QuestionFlow {
     private Iterator<Question> iterator;
     private final QuestionCollection questions;
+    private Question current;
 
     public QuestionFlow() {
         final TagRepository repository = new StaticTagRepository();
@@ -15,9 +16,14 @@ public class QuestionFlow {
         iterator = questions.getQuestions().iterator();
     }
 
+    public Question current() {
+        return current;
+    }
+
     public Question next() {
         try {
-            return iterator.next();
+            current = iterator.next();
+            return current;
         } catch (NoSuchElementException e) {
             return null;
         }
@@ -28,6 +34,7 @@ public class QuestionFlow {
     }
 
     public void reset() {
+        current = null;
         iterator = questions.getQuestions().iterator();
     }
 }
