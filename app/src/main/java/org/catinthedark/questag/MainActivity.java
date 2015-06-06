@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     bigView.setVisibility(View.INVISIBLE);
                     layout.setVisibility(View.VISIBLE);
-                    bigView.setImageDrawable(null);
+                    bigView.setImageResource(0);
                 }
             });
         }
@@ -111,21 +111,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showVariants() {
+        for (ImageViewController controller: imageViewControllers) {
+            controller.clearView();
+        }
+
+        if (!questionFlow.hasNext()) {
+            Toast.makeText(getApplicationContext(), "Game over. Reset", Toast.LENGTH_SHORT).show();
+            questionFlow.reset();
+        }
         Question question = questionFlow.next();
-        for (int i = 0; i < buttonControllers.size(); ++i) {
-            if (!questionFlow.hasNext()) {
-                Toast.makeText(getApplicationContext(), "Game over. Reset", Toast.LENGTH_SHORT).show();
-                questionFlow.reset();
+
+        picturesRepository.getUrlByTag(question.getAnswer().getName(), new PicturesRepository.OnLoaded() {
+            @Override
+            public void run(final List<ImageModel> models) {
+                for (int i = 0; i < imageViewControllers.size(); ++i) {
+                    imageViewControllers.get(i).setModel(models.get(i));
+                }
             }
+        });
+
+        for (int i = 0; i < buttonControllers.size(); ++i) {
             final Tag tag = question.getVariants().get(i);
             buttonControllers.get(i).setModel(tag);
-            final ImageViewController imageViewController = imageViewControllers.get(i);
-            picturesRepository.getUrlByTag(question.getAnswer().getName(), new PicturesRepository.OnLoaded() {
-                @Override
-                public void run(final ImageModel model) {
-                    imageViewController.setModel(model);
-                }
-            });
         }
     }
 

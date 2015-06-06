@@ -40,11 +40,19 @@ public class InstagramPicturesRepository implements PicturesRepository {
                                 callback.run(null);
                             }
                             final List<InstagramJson.Media> media = new ArrayList<InstagramJson.Media>(Arrays.asList(result.data));
-                            Integer i = random.nextInt(media.size());
-                            final InstagramJson.Image images = media.get(i).images;
+                            Collections.shuffle(media);
+                            final List<InstagramJson.Image> imagesList = new ArrayList<>(4);
+                            imagesList.add(media.get(0).images);
+                            imagesList.add(media.get(1).images);
+                            imagesList.add(media.get(2).images);
+                            imagesList.add(media.get(3).images);
 
-                            final ImageModel image = new ImageModel(images.low_resolution.url, images.standard_resolution.url);
-                            callback.run(image);
+                            final List<ImageModel> imageModelList = new ArrayList<>(4);
+                            for (InstagramJson.Image image: imagesList) {
+                                imageModelList.add(new ImageModel(image.low_resolution.url, image.standard_resolution.url));
+                            }
+
+                            callback.run(imageModelList);
                         } else {
                             Log.e("QUESTAG", e.getLocalizedMessage());
                             callback.run(null);

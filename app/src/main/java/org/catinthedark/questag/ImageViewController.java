@@ -28,4 +28,8 @@ public class ImageViewController {
     public void setOnClickListener(MainActivity.ThumbImageListener onClickListener) {
         view.setOnClickListener(onClickListener);
     }
+
+    public void clearView() {
+        view.setImageResource(0);
+    }
 }
