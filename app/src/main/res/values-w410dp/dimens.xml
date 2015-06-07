@@ -1,0 +1,8 @@
+<resources>
+    <dimen name="image_width">185dp</dimen>
+    <dimen name="image_height">185dp</dimen>
+    <dimen name="big_image_width">370dp</dimen>
+    <dimen name="big_image_height">370dp</dimen>
+    <dimen name="button_width">185dp</dimen>
+    <dimen name="button_height">90dp</dimen>
+</resources>

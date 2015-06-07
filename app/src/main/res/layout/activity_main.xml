@@ -9,16 +9,16 @@
 
     <ImageView
         android:visibility="invisible"
-        android:layout_width="322dp"
-        android:layout_height="322dp"
+        android:layout_width="@dimen/big_image_width"
+        android:layout_height="@dimen/big_image_width"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:id="@+id/imageViewBig" />
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="322dp"
-        android:layout_height="322dp"
+        android:layout_width="@dimen/big_image_width"
+        android:layout_height="@dimen/big_image_height"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:id="@+id/imagesLayout">
@@ -32,14 +32,14 @@
             <ImageView
                 android:id="@+id/imageView1"
                 android:padding="2dp"
-                android:layout_width="160dp"
-                android:layout_height="160dp" />
+                android:layout_width="@dimen/image_width"
+                android:layout_height="@dimen/image_height" />
 
             <ImageView
                 android:id="@+id/imageView2"
                 android:padding="2dp"
-                android:layout_width="160dp"
-                android:layout_height="160dp"/>
+                android:layout_width="@dimen/image_width"
+                android:layout_height="@dimen/image_height"/>
         </LinearLayout>
 
         <LinearLayout
@@ -51,14 +51,14 @@
             <ImageView
                 android:id="@+id/imageView3"
                 android:padding="2dp"
-                android:layout_width="160dp"
-                android:layout_height="160dp" />
+                android:layout_width="@dimen/image_width"
+                android:layout_height="@dimen/image_height" />
 
             <ImageView
                 android:id="@+id/imageView4"
                 android:padding="2dp"
-                android:layout_width="160dp"
-                android:layout_height="160dp" />
+                android:layout_width="@dimen/image_width"
+                android:layout_height="@dimen/image_height" />
         </LinearLayout>
 
     </LinearLayout>
@@ -77,14 +77,14 @@
             android:layout_height="wrap_content">
 
             <Button
-                android:layout_width="160dp"
-                android:layout_height="80dp"
+                android:layout_width="@dimen/button_width"
+                android:layout_height="@dimen/button_height"
                 android:id="@+id/button1"
                 android:onClick="tagSelected" />
 
             <Button
-                android:layout_width="160dp"
-                android:layout_height="80dp"
+                android:layout_width="@dimen/button_width"
+                android:layout_height="@dimen/button_height"
                 android:id="@+id/button2"
                 android:onClick="tagSelected" />
         </LinearLayout>
@@ -96,14 +96,14 @@
             android:layout_height="wrap_content">
 
             <Button
-                android:layout_width="160dp"
-                android:layout_height="80dp"
+                android:layout_width="@dimen/button_width"
+                android:layout_height="@dimen/button_height"
                 android:id="@+id/button3"
                 android:onClick="tagSelected" />
 
             <Button
-                android:layout_width="160dp"
-                android:layout_height="80dp"
+                android:layout_width="@dimen/button_width"
+                android:layout_height="@dimen/button_height"
                 android:id="@+id/button4"
                 android:onClick="tagSelected" />
         </LinearLayout>
