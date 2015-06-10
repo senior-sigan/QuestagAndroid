@@ -19,7 +19,6 @@ public class InstagramPicturesRepository implements PicturesRepository {
     private static final String CLIENT_ID = "417c3ee8c9544530b83aa1c24de2abb3";
     private static final String apiUrl = "https://api.instagram.com/v1/tags/%s/media/recent?client_id=%s&count=100";
     private final Context context;
-    private final Random random = new Random();
 
     public InstagramPicturesRepository(final Context context) {
         this.context = context;
@@ -54,7 +53,7 @@ public class InstagramPicturesRepository implements PicturesRepository {
 
                             callback.run(imageModelList);
                         } else {
-                            Log.e("QUESTAG", e.getLocalizedMessage());
+                            Log.e("QUESTAG", e.getMessage());
                             callback.run(null);
                         }
                     }

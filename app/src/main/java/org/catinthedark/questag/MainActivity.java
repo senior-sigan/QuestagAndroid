@@ -16,13 +16,29 @@ import com.koushikdutta.ion.Ion;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.InjectViews;
+
 
 public class MainActivity extends AppCompatActivity {
 
     final static String TAG = "QUESTAG";
-    QuestionFlow questionFlow;
+
+    @InjectViews({R.id.button1, R.id.button2, R.id.button3, R.id.button4})
+    List<Button> buttons;
+    @InjectViews({R.id.imageView1, R.id.imageView2, R.id.imageView3, R.id.imageView4})
+    List<ImageView> imageViews;
+
+    @InjectView(R.id.imageViewBig)
+    ImageView bigView;
+    @InjectView(R.id.imagesLayout)
+    LinearLayout layout;
+
     final List<ButtonController> buttonControllers = new ArrayList<>(4);
     final List<ImageViewController> imageViewControllers = new ArrayList<>(4);
+
+    QuestionFlow questionFlow;
     PicturesRepository picturesRepository;
 
     class ButtonListener implements View.OnClickListener {
@@ -61,8 +77,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         private void zoomImageFromThumb(final ImageView imageView, final ImageModel model) {
-            final ImageView bigView = (ImageView)findViewById(R.id.imageViewBig);
-            final LinearLayout layout = (LinearLayout)findViewById(R.id.imagesLayout);
             bigView.setImageDrawable(imageView.getDrawable());
             Ion.with(bigView).load(model.highResolutionUrl);
             bigView.setPivotX(0f);
@@ -85,26 +99,21 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.inject(this);
 
         picturesRepository = new InstagramPicturesRepository(getApplicationContext());
         questionFlow = new QuestionFlow();
 
-        buttonControllers.add(new ButtonController((Button)findViewById(R.id.button1)));
-        buttonControllers.add(new ButtonController((Button)findViewById(R.id.button2)));
-        buttonControllers.add(new ButtonController((Button)findViewById(R.id.button3)));
-        buttonControllers.add(new ButtonController((Button)findViewById(R.id.button4)));
-
-        for (ButtonController controller: buttonControllers) {
+        for(Button view: buttons) {
+            ButtonController controller = new ButtonController(view);
             controller.setOnClickListener(new ButtonListener(controller, questionFlow));
+            buttonControllers.add(controller);
         }
 
-        imageViewControllers.add(new ImageViewController((ImageView)findViewById(R.id.imageView1)));
-        imageViewControllers.add(new ImageViewController((ImageView)findViewById(R.id.imageView2)));
-        imageViewControllers.add(new ImageViewController((ImageView)findViewById(R.id.imageView3)));
-        imageViewControllers.add(new ImageViewController((ImageView)findViewById(R.id.imageView4)));
-
-        for (ImageViewController controller: imageViewControllers) {
+        for (ImageView view: imageViews) {
+            ImageViewController controller = new ImageViewController(view);
             controller.setOnClickListener(new ThumbImageListener(controller));
+            imageViewControllers.add(controller);
         }
 
         showVariants();
@@ -131,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         for (int i = 0; i < buttonControllers.size(); ++i) {
-            final Tag tag = question.getVariants().get(i);
+            Tag tag = question.getVariants().get(i);
             buttonControllers.get(i).setModel(tag);
         }
     }
