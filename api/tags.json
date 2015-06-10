@@ -1,0 +1,8 @@
+{
+  "data": [{
+    "type": "tagsCollection",
+    "id": "1",
+    "tags": ["cat", "dog", "flowers", "kavai", "nya", "kitten", "sky", "ocean", "river", "sun", "city"]
+  }],
+  "count": 1
+}
