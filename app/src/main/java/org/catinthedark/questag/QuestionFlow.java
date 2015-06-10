@@ -1,19 +1,25 @@
 package org.catinthedark.questag;
 
+import android.content.Context;
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class QuestionFlow {
     private Iterator<Question> iterator;
-    private final QuestionCollection questions;
+    private QuestionCollection questions;
     private Question current;
 
-    public QuestionFlow() {
-        final TagRepository repository = new StaticTagRepository();
+    public QuestionFlow(final Context context) {
+        final TagRepository repository = new RemoteTagRepository(context);
         final QuestionGeneratorStrategy strategy = new UniqueQuestionGeneratorStrategy();
-        this.questions = strategy.generate(repository.getTagCollection());
-
-        iterator = questions.getQuestions().iterator();
+        repository.getTagCollection(new TagRepository.OnLoaded() {
+            @Override
+            public void run(final TagCollection tagCollection) {
+                questions = strategy.generate(tagCollection);
+                iterator = questions.getQuestions().iterator();
+            }
+        });
     }
 
     public Question current() {

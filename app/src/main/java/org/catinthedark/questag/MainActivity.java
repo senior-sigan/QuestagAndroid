@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         picturesRepository = new InstagramPicturesRepository(getApplicationContext());
-        questionFlow = new QuestionFlow();
+        questionFlow = new QuestionFlow(getApplicationContext());
 
         buttonControllers.add(new ButtonController((Button)findViewById(R.id.button1)));
         buttonControllers.add(new ButtonController((Button)findViewById(R.id.button2)));

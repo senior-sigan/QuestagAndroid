@@ -8,12 +8,12 @@ public class StaticTagRepository implements TagRepository {
             "cat", "dog", "flowers", "kavai", "nya", "kitten", "sky", "ocean", "river", "sun", "city"};
 
     @Override
-    public TagCollection getTagCollection() {
+    public void getTagCollection(final OnLoaded onLoaded) {
         Collection<Tag> tagCollection = new ArrayList<>(10);
         for (String tag: tags) {
             tagCollection.add(new Tag(tag));
         }
 
-        return new TagCollection(tagCollection);
+        onLoaded.run(new TagCollection(tagCollection));
     }
 }
